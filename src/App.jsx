@@ -51,7 +51,8 @@ function App() {
     if (mapRef.current || !mapContainer.current) return;
     mapRef.current = new maplibregl.Map({
       container: mapContainer.current,
-      style: 'https://demotiles.maplibre.org/style.json',
+      // Use a beautiful open-source basemap from MapTiler -- frontend key here
+      style: 'https://api.maptiler.com/maps/streets/style.json?key=Y2QwhDtY02fO9r6p6loF',
       center: [0, 0],
       zoom: 2,
     });
