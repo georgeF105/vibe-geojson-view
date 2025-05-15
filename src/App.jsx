@@ -62,14 +62,18 @@ function App() {
     const map = mapRef.current;
     if (!map) return;
     // Remove previous sources/layers
-    // Remove all previous geojson layers
+    // Remove all previous geojson layers and their associated layers
     const style = map.getStyle();
     if (style && style.sources) {
       Object.keys(style.sources).forEach((id) => {
-      if (id.startsWith('geojson-')) {
-        if (map.getLayer(id)) map.removeLayer(id);
-        map.removeSource(id);
-      }
+        if (id.startsWith('geojson-')) {
+          // Remove all possible layers for this source
+          ['','-line','-point'].forEach(suffix => {
+            const layerId = id + suffix;
+            if (map.getLayer(layerId)) map.removeLayer(layerId);
+          });
+          map.removeSource(id);
+        }
       });
     }
     // Add new geojsons
