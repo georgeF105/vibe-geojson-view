@@ -145,19 +145,18 @@ function App() {
 
   return (
     <div className="app-container">
-      <h1>GeoJSON Map Viewer</h1>
-      <input
-        type="file"
-        accept=".geojson,application/geo+json,application/json"
-        multiple
-        onChange={handleFiles}
-      />
-      <button onClick={handleClear} style={{ marginLeft: 8 }}>Clear Map</button>
-      {error && <div className="error">{error}</div>}
-      <div ref={mapContainer} className="map-container" style={{ height: '70vh', marginTop: 16 }} />
-      <div style={{ marginTop: 16, fontSize: 12, color: '#888' }}>
-        <p>Upload one or more GeoJSON files to view them on the map. Features will be styled by type.</p>
+      <div className="app-navbar">
+        <h1>GeoJSON Map Viewer</h1>
+        <input
+          type="file"
+          accept=".geojson,application/geo+json,application/json"
+          multiple
+          onChange={handleFiles}
+        />
+        <button onClick={handleClear}>Clear Map</button>
+        {error && <div className="error">{error}</div>}
       </div>
+      <div ref={mapContainer} className="map-container" />
     </div>
   );
 }
