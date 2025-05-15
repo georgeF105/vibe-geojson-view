@@ -18,6 +18,22 @@ function App() {
       try {
         const text = await file.text();
         const json = JSON.parse(text);
+        // Correct GeoJSON type casing if needed
+        if (json.type && typeof json.type === 'string') {
+          const typeMap = {
+            'featurecollection': 'FeatureCollection',
+            'feature': 'Feature',
+            'geometrycollection': 'GeometryCollection',
+            'point': 'Point',
+            'multipoint': 'MultiPoint',
+            'linestring': 'LineString',
+            'multilinestring': 'MultiLineString',
+            'polygon': 'Polygon',
+            'multipolygon': 'MultiPolygon',
+          };
+          const fixedType = typeMap[json.type.toLowerCase()];
+          if (fixedType) json.type = fixedType;
+        }
         if (json.type !== 'FeatureCollection' && json.type !== 'Feature') {
           throw new Error('Invalid GeoJSON: must be FeatureCollection or Feature');
         }
