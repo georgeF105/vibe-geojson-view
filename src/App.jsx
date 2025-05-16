@@ -146,6 +146,7 @@ function App() {
   return (
     <div className="app-container">
       <div className="app-navbar">
+        <img src="./vibe-icon.png" alt="Vibe Icon" className="vibe-icon" />
         <h1>Vibe GeoJSON View</h1>
         <input
           type="file"
