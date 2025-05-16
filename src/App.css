@@ -237,6 +237,7 @@ body, html, #root {
   max-width: 180px;
   color: #00ffe1;
   font-family: 'DM Sans', Arial, sans-serif;
+  backdrop-filter: none;
 }
 .file-list-overlay ul {
   list-style: none;
@@ -252,6 +253,7 @@ body, html, #root {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  background: none;
 }
 @media (max-width: 600px) {
   .file-list-overlay {
@@ -263,5 +265,44 @@ body, html, #root {
   }
   .file-list-overlay li {
     font-size: 0.75rem;
+  }
+}
+
+.upload-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem 1.2rem;
+  margin-left: 1.5rem;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background 0.2s, color 0.2s;
+  height: 36px;
+  min-width: 44px;
+}
+.upload-icon-btn:hover {
+  background: rgba(0,255,225,0.08);
+}
+.upload-icon {
+  width: 24px;
+  height: 24px;
+  color: #00ffe1;
+}
+.upload-icon-btn input[type="file"] {
+  display: none;
+}
+@media (max-width: 600px) {
+  .upload-icon-btn {
+    height: 28px;
+    padding: 0.2rem 0.7rem;
+    margin-left: 0.5rem;
+    min-width: 32px;
+  }
+  .upload-icon {
+    width: 18px;
+    height: 18px;
   }
 }

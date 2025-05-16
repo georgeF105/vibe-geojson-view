@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './App.css';
+import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 
 function App() {
   const [geojsons, setGeojsons] = useState([]);
@@ -219,12 +220,16 @@ function App() {
       <div className="app-navbar">
         <img src="./vibe-icon.png" alt="Vibe Icon" className="vibe-icon" />
         <h1>Vibe GeoJSON View</h1>
-        <input
-          type="file"
-          accept=".geojson,application/geo+json,application/json"
-          multiple
-          onChange={handleFiles}
-        />
+        <label className="upload-icon-btn">
+          <ArrowUpTrayIcon className="upload-icon" />
+          <input
+            type="file"
+            accept=".geojson,application/geo+json,application/json"
+            multiple
+            onChange={handleFiles}
+            style={{ display: 'none' }}
+          />
+        </label>
         <button onClick={handleClear}>Clear Map</button>
         {error && <div className="error">{error}</div>}
       </div>
