@@ -38,13 +38,13 @@ function App() {
         if (json.type !== 'FeatureCollection' && json.type !== 'Feature') {
           throw new Error('Invalid GeoJSON: must be FeatureCollection or Feature');
         }
-        loaded.push(json);
+        loaded.push({ name: file.name, data: json });
       } catch (err) {
         setError(`Error in file ${file.name}: ${err.message}`);
         return;
       }
     }
-    setGeojsons(loaded);
+    setGeojsons(prev => [...prev, ...loaded]);
   };
 
   // Initialize map
@@ -64,7 +64,6 @@ function App() {
     const map = mapRef.current;
     if (!map) return;
     // Remove previous sources/layers
-    // Remove all previous geojson layers and their associated layers
     const style = map.getStyle();
     if (style && style.sources) {
       Object.keys(style.sources).forEach((id) => {
@@ -79,10 +78,10 @@ function App() {
       });
     }
     // Add new geojsons
-    geojsons.forEach((geojson, idx) => {
+    geojsons.forEach((geo, idx) => {
       const id = `geojson-${idx}`;
       if (map.getSource(id)) map.removeSource(id);
-      map.addSource(id, { type: 'geojson', data: geojson });
+      map.addSource(id, { type: 'geojson', data: geo.data });
       map.addLayer({
         id,
         type: 'fill',
@@ -117,7 +116,8 @@ function App() {
     // Zoom to bounds
     if (geojsons.length > 0) {
       const bounds = new maplibregl.LngLatBounds();
-      geojsons.forEach((geojson) => {
+      geojsons.forEach((geo) => {
+        const geojson = geo.data;
         const features = geojson.type === 'FeatureCollection' ? geojson.features : [geojson];
         features.forEach((f) => {
           const coords = getCoords(f.geometry);
@@ -174,13 +174,13 @@ function App() {
         if (json.type !== 'FeatureCollection' && json.type !== 'Feature') {
           throw new Error('Invalid GeoJSON: must be FeatureCollection or Feature');
         }
-        loaded.push(json);
+        loaded.push({ name: file.name, data: json });
       } catch (err) {
         setError(`Error in file ${file.name}: ${err.message}`);
         return;
       }
     }
-    setGeojsons(loaded);
+    setGeojsons(prev => [...prev, ...loaded]);
   };
 
   const handleDragOver = (e) => {
@@ -240,6 +240,15 @@ function App() {
           <p>Drag & drop GeoJSON files here</p>
         </div>
       </div>
+      {geojsons.length > 0 && (
+        <div className="file-list-overlay">
+          <ul>
+            {geojsons.map((g, i) => (
+              <li key={i}>{g.name}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div ref={mapContainer} className="map-container" />
     </div>
   );
