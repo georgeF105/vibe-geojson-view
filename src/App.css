@@ -173,3 +173,52 @@ body, html, #root {
     margin-right: 0.5rem;
   }
 }
+
+.drop-zone {
+  position: absolute;
+  top: 72px;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 72px);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.drop-zone.active {
+  pointer-events: all;
+  opacity: 1;
+  background: rgba(17, 17, 17, 0.85);
+  border: 2.5px dashed #00ffe1;
+}
+.drop-zone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #00ffe1;
+  font-family: 'DM Sans', Arial, sans-serif;
+  font-size: 1.2rem;
+  background: rgba(34, 34, 34, 0.95);
+  border-radius: 16px;
+  padding: 2.5rem 3.5rem;
+  box-shadow: 0 4px 32px #00ffe1a0;
+  border: 1.5px solid #00ffe1;
+  pointer-events: none;
+}
+.drop-zone.active .drop-zone-content {
+  pointer-events: all;
+}
+.drop-zone-content p {
+  margin: 1rem 0 0 0;
+  font-size: 1.1rem;
+  color: #00ffe1;
+}
+@media (max-width: 600px) {
+  .drop-zone-content {
+    padding: 1.2rem 1.5rem;
+    font-size: 1rem;
+  }
+}

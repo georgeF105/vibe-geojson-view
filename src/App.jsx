@@ -6,6 +6,7 @@ import './App.css';
 function App() {
   const [geojsons, setGeojsons] = useState([]);
   const [error, setError] = useState('');
+  const [isDragActive, setIsDragActive] = useState(false);
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
 
@@ -143,6 +144,76 @@ function App() {
     setError('');
   };
 
+  // Handle drag and drop
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    setIsDragActive(false);
+    setError('');
+    const files = Array.from(e.dataTransfer.files);
+    const loaded = [];
+    for (const file of files) {
+      try {
+        const text = await file.text();
+        const json = JSON.parse(text);
+        // Correct GeoJSON type casing if needed
+        if (json.type && typeof json.type === 'string') {
+          const typeMap = {
+            'featurecollection': 'FeatureCollection',
+            'feature': 'Feature',
+            'geometrycollection': 'GeometryCollection',
+            'point': 'Point',
+            'multipoint': 'MultiPoint',
+            'linestring': 'LineString',
+            'multilinestring': 'MultiLineString',
+            'polygon': 'Polygon',
+            'multipolygon': 'MultiPolygon',
+          };
+          const fixedType = typeMap[json.type.toLowerCase()];
+          if (fixedType) json.type = fixedType;
+        }
+        if (json.type !== 'FeatureCollection' && json.type !== 'Feature') {
+          throw new Error('Invalid GeoJSON: must be FeatureCollection or Feature');
+        }
+        loaded.push(json);
+      } catch (err) {
+        setError(`Error in file ${file.name}: ${err.message}`);
+        return;
+      }
+    }
+    setGeojsons(loaded);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragActive(true);
+  };
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragActive(false);
+  };
+
+  // Make drop zone overlay work globally, not just over the map
+  useEffect(() => {
+    const handleWindowDragOver = (e) => {
+      e.preventDefault();
+      setIsDragActive(true);
+    };
+    const handleWindowDrop = () => {
+      setIsDragActive(false);
+    };
+    const handleWindowDragLeave = () => {
+      setIsDragActive(false);
+    };
+    window.addEventListener('dragover', handleWindowDragOver);
+    window.addEventListener('drop', handleWindowDrop);
+    window.addEventListener('dragleave', handleWindowDragLeave);
+    return () => {
+      window.removeEventListener('dragover', handleWindowDragOver);
+      window.removeEventListener('drop', handleWindowDrop);
+      window.removeEventListener('dragleave', handleWindowDragLeave);
+    };
+  }, []);
+
   return (
     <div className="app-container">
       <div className="app-navbar">
@@ -156,6 +227,18 @@ function App() {
         />
         <button onClick={handleClear}>Clear Map</button>
         {error && <div className="error">{error}</div>}
+      </div>
+      <div
+        className={`drop-zone${isDragActive ? ' active' : ''}`}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        onDragEnter={handleDragOver}
+        onDragLeave={handleDragLeave}
+      >
+        <div className="drop-zone-content">
+          <span role="img" aria-label="Upload" style={{fontSize: '2rem'}}>📂</span>
+          <p>Drag & drop GeoJSON files here</p>
+        </div>
       </div>
       <div ref={mapContainer} className="map-container" />
     </div>
