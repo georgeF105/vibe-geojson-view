@@ -245,15 +245,17 @@ function App() {
           <p>Drag & drop GeoJSON files here</p>
         </div>
       </div>
-      {geojsons.length > 0 && (
-        <div className="file-list-overlay">
+      <div className="file-list-overlay">
+        {geojsons.length === 0 ? (
+          <div className="file-list-empty">Drag and drop your GeoJSON to see it on the map, or select a file using the upload button.</div>
+        ) : (
           <ul>
             {geojsons.map((g, i) => (
               <li key={i}>{g.name}</li>
             ))}
           </ul>
-        </div>
-      )}
+        )}
+      </div>
       <div ref={mapContainer} className="map-container" />
     </div>
   );
