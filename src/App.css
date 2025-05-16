@@ -1,8 +1,9 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100vw;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  text-align: initial;
 }
 
 .logo {
@@ -89,15 +90,6 @@
   font-size: 0.95rem;
 }
 
-.map-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
-}
-
 body, html, #root {
   height: 100%;
   margin: 0;
@@ -113,6 +105,15 @@ body, html, #root {
   padding: 0;
   position: relative;
   font-family: 'Inter', Arial, sans-serif;
+}
+
+.map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
 }
 
 @media (max-width: 600px) {
