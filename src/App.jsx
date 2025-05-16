@@ -146,7 +146,7 @@ function App() {
   return (
     <div className="app-container">
       <div className="app-navbar">
-        <h1>GeoJSON Map Viewer</h1>
+        <h1>Vibe GeoJSON View</h1>
         <input
           type="file"
           accept=".geojson,application/geo+json,application/json"
