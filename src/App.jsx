@@ -16,6 +16,7 @@ function App() {
     setError('');
     const files = Array.from(e.target.files);
     const loaded = [];
+    const errors = [];
     for (const file of files) {
       try {
         const text = await file.text();
@@ -41,11 +42,17 @@ function App() {
         }
         loaded.push({ name: file.name, data: json });
       } catch (err) {
-        setError(`Error in file ${file.name}: ${err.message}`);
-        return;
+        errors.push(`Error in file ${file.name}: ${err.message}`);
       }
     }
-    setGeojsons(prev => [...prev, ...loaded]);
+    if (errors.length > 0) {
+      setError(errors.join('; '));
+    }
+    if (loaded.length > 0) {
+      setGeojsons(prev => [...prev, ...loaded]);
+    }
+    // Allow re-uploading the same file by resetting the input value
+    if (e.target) e.target.value = '';
   };
 
   // Initialize map
@@ -152,6 +159,7 @@ function App() {
     setError('');
     const files = Array.from(e.dataTransfer.files);
     const loaded = [];
+    const errors = [];
     for (const file of files) {
       try {
         const text = await file.text();
@@ -177,11 +185,15 @@ function App() {
         }
         loaded.push({ name: file.name, data: json });
       } catch (err) {
-        setError(`Error in file ${file.name}: ${err.message}`);
-        return;
+        errors.push(`Error in file ${file.name}: ${err.message}`);
       }
     }
-    setGeojsons(prev => [...prev, ...loaded]);
+    if (errors.length > 0) {
+      setError(errors.join('; '));
+    }
+    if (loaded.length > 0) {
+      setGeojsons(prev => [...prev, ...loaded]);
+    }
   };
 
   const handleDragOver = (e) => {
