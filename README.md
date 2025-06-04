@@ -1,6 +1,6 @@
-# React + Vite
+# Vibe GeoJSON View
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a lightweight GeoJSON viewer built with React and Vite. It provides a minimal setup with Hot Module Replacement (HMR) and ESLint rules.
 
 Currently, two official plugins are available:
 
